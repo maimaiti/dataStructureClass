@@ -222,10 +222,10 @@ class BinaryTree:
 
     def verticalOrder(self, root: TreeNode):
         columnTable = collections.defaultdict(list)
-        queue = [(root, 0)]
+        queue = collections.deque([(root, 0)])
         
         while queue:
-            node, column = queue.pop(0)
+            node, column = queue.popleft()
             
             if node is not None:
                 columnTable[column].append(node.val)
@@ -235,18 +235,57 @@ class BinaryTree:
                 
         return [columnTable[x] for x in sorted(columnTable.keys())]
 
+    def sumRootToLeaf(self, root, val=0):
+        if not root:
+            return 0
+        val = val * 2 + root.val
+        if root.left == root.right:
+            return val
+        return self.sumRootToLeaf(root.left, val) + self.sumRootToLeaf(root.right, val)
+
+        
+
+
+
+class CBTInserter:
+# Complete Binary Tree Inserter. A complete binary tree is a binary tree in which every level, 
+# except possibly the last, is completely filled, and all nodes are as far left as possible.
+
+    def __init__(self, root: TreeNode):
+        self.deque = collections.deque()
+        self.root = root
+        q = collections.deque([root])
+        while q:
+            node = q.popleft()
+            if not node.left or not node.right:
+                self.deque.append(node)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        
+
+    def insert(self, v: int) -> int:
+        node = self.deque[0]
+        self.deque.append(TreeNode(v))
+        
+        if not node.left:
+            node.left = self.deque[-1]
+        else:
+            node.right = self.deque[-1]
+            self.deque.popleft()
+        return node.val
 
 
 
 
 
-
-a=TreeNode(5)
-b=TreeNode(2)
-c=TreeNode(4)
-d=TreeNode(1)
-e=TreeNode(6)
-f=TreeNode(3)
+a=TreeNode(1)
+b=TreeNode(0)
+c=TreeNode(1)
+d=TreeNode(0)
+e=TreeNode(1)
+f=TreeNode(0)
 
 a.left = b 
 a.right= c
@@ -261,6 +300,6 @@ c.right = f
 # a1.right=c1
 
 bt = BinaryTree()
-print(bt.verticalOrder(a))
+print(bt.sumRootToLeaf(a, val=0))
 
 
