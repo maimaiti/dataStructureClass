@@ -219,8 +219,6 @@ class LinkedList:
         tail.next = curr
         return head
 
-
-
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
         #  remove the n-th node from the end of list 
 
@@ -240,31 +238,61 @@ class LinkedList:
         first.next = first.next.next
         return dummy.next 
 
-
-
     def mergeKLists(self, lists):
         '''
         :type lists: list[ListNode]
         :rtype: ListNode
         '''
-        self.nodes=[]
+        nodes=[]
         for l in lists:
             while l:
-                self.nodes.append(l.val)
+                nodes.append(l.val)
                 l=l.next
                 
         head = point = ListNode(0)
-        for x in sorted(self.nodes):
+        for x in sorted(nodes):
             point.next = ListNode(x)
             point = point.next 
-        return head.next 
+        return head.next
+
+    def oddEvenList(self, head: ListNode) -> ListNode:
+        if head == None:
+            return None
+
+        odd, even = head, head.next
+        evenHead = even 
+        while even and even.next:
+            odd.next = even.next
+            odd = odd.next 
+            even.next = odd.next 
+            even = even.next
+        odd.next = evenHead
+        return head 
+
+
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        before = before_head = ListNode(0)
+        after = after_head = ListNode(0)
+
+        while head:
+            if head.val < x:
+                before.next = head
+                before = before.next
+            else:
+                after.next = head
+                after = after.next
+            head = head.next
+
+        after.next = None
+        before.next = after_head.next
+        return before_head.next 
 
 
 
 a1=ListNode(1)
-b1=ListNode(2)
+b1=ListNode(4)
 c1=ListNode(3)
-d1=ListNode(4)
+d1=ListNode(2)
 a1.next = b1
 b1.next = c1
 c1.next = d1
@@ -285,6 +313,6 @@ ls = [a1, a2, a3]
 
 
 ll = LinkedList()
-dd=ll.reverseBetween(a1, 2, 3)
+dd=ll.mergeKLists(ls)
 print(dd.val, dd.next.val, dd.next.next.val)
 
