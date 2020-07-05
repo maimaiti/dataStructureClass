@@ -206,7 +206,18 @@ class LinkedList:
         tail, con = curr, prev
         
         while n:
-            
+            third = curr.next 
+            curr.next = prev
+            prev = curr
+            curr = third
+            n -= 1
+        
+        if con:
+            con.next = prev
+        else:
+            head = prev
+        tail.next = curr
+        return head
 
 
 
@@ -252,9 +263,11 @@ class LinkedList:
 
 a1=ListNode(1)
 b1=ListNode(2)
-c1=ListNode(1)
+c1=ListNode(3)
+d1=ListNode(4)
 a1.next = b1
 b1.next = c1
+c1.next = d1
 
 a2=ListNode(2)
 b2=ListNode(1)
@@ -272,6 +285,6 @@ ls = [a1, a2, a3]
 
 
 ll = LinkedList()
-dd=ll.mergeKLists(ls)
+dd=ll.reverseBetween(a1, 2, 3)
 print(dd.val, dd.next.val, dd.next.next.val)
 
