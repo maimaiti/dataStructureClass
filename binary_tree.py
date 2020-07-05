@@ -1,3 +1,5 @@
+import collections
+
 # Binary Tree
 class TreeNode:
 
@@ -145,21 +147,112 @@ class BinaryTree:
         max_gain(root)
         return max_sum
 
+    def levelOrder(self, root: TreeNode):
+        levels = []
+        if not root:
+            return levels
+        
+        def helper(node, level):
+            if len(levels) == level:
+                levels.append([])
+            
+            levels[level].append(node.val)
+
+            if node.left:
+                helper(node.left, level + 1)
+            if node.right:
+                helper(node.right, level + 1)
+        helper(root, 0)
+        return levels
+
+    
+    def zigzagLevelOrder(self, root: TreeNode):
+        if not root:
+            return None
+        q = collections.deque()
+        q.append(root)
+        res = []
+        i = 1
+        while q:
+            level = []
+            for x in range(len(q)):
+                node=q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            
+            if i%2 != 0:
+                res.append(level)
+            else:
+                res.append(level[::-1])
+            i += 1
+        return res
+
+    def hasPathSum(self, root, sum):
+        if not root:
+            return False
+
+        sum -= root.val
+        if not root.left and not root.right:
+            return sum == 0
+        return self.hasPathSum(root.left, sum) or self.hasPathSum(root.right, sum)
+
+    def pathSum(self, root: TreeNode, target: int):
+        result = []
+        current_path = []
+        
+        def helper(node):
+            if not node:
+                return None
+            
+            current_path.append( node.val )
+   
+            if not node.left and not node.right and sum(current_path) == target:
+                result.append(list(current_path))
+
+            helper(node.left)
+            helper(node.right)
+
+            current_path.pop()
+
+        helper(root)
+        return result
+
+    def verticalOrder(self, root: TreeNode):
+        columnTable = collections.defaultdict(list)
+        queue = [(root, 0)]
+        
+        while queue:
+            node, column = queue.pop(0)
+            
+            if node is not None:
+                columnTable[column].append(node.val)
+                
+                queue.append((node.left, column - 1))
+                queue.append((node.right, column + 1))
+                
+        return [columnTable[x] for x in sorted(columnTable.keys())]
 
 
 
-# a=TreeNode(5)
-# b=TreeNode(2)
-# c=TreeNode(4)
-# d=TreeNode(1)
-# e=TreeNode(6)
-# f=TreeNode(3)
 
-# a.left = b 
-# a.right= c
-# b.left = d
-# c.left = e
-# c.right = f
+
+
+
+a=TreeNode(5)
+b=TreeNode(2)
+c=TreeNode(4)
+d=TreeNode(1)
+e=TreeNode(6)
+f=TreeNode(3)
+
+a.left = b 
+a.right= c
+b.left = d
+c.left = e
+c.right = f
 
 # a1=TreeNode(5)
 # b1=TreeNode(2)
@@ -167,7 +260,7 @@ class BinaryTree:
 # a1.left=b1
 # a1.right=c1
 
-# bt = BinaryTree()
-# print(bt.isSubtree(a, a1))
+bt = BinaryTree()
+print(bt.verticalOrder(a))
 
 
