@@ -174,7 +174,25 @@ class LinkedList:
         if ktail:
             ktail.next = head
 
-        return new_head if new_head else head 
+        return new_head if new_head else head
+
+
+    def deleteNodes(self, head, m, n):
+
+        dummy = ListNode(None)
+        dummy.next = head
+        i = 0
+        while head:
+            if i < m-1:
+                i += 1
+            else:
+                j = 0
+                while j < n and head.next:
+                    head.next = head.next.next
+                    j += 1
+                i = 0
+            head = head.next
+        return dummy.next  
 
 
 a=ListNode(1)
@@ -188,7 +206,7 @@ c.next = d
 
 
 ll = LinkedList()
-dd=ll.reverseKgroup(a, 2)
-print(dd.val, dd.next.val, dd.next.next.val, dd.next.next.next.val) 
+dd=ll.deleteNodes(a, 1, 1)
+print(dd.val, dd.next.val) 
 
 
