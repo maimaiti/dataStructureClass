@@ -108,13 +108,39 @@ class LinkedList:
             l1 = (l1.next if l1 else None)
             l2 = (l2.next if l2 else None)
                
-        return result.next    
+        return result.next
+
+    def rotateRight(self, head: ListNode, k: int)->ListNode:
+        # base case
+        if not head:
+            return None
+        if not head.next:
+            return head
+
+        # close the linked list into the ring
+        old_tail = head
+        n = 1
+        while old_tail.next:
+            old_tail = old_tail.next
+            n += 1
+        old_tail.next = head
+        
+        # find new tail (n-k%n-1)th node
+        # and new head (n-k%n)th node
+        new_tail = head
+        for i in range(n-k % n-1):
+            new_tail = new_tail.next
+        new_head = new_tail.next
+        
+        # break the ring
+        new_tail.next = None
+        return new_head    
 
 
 a=ListNode(1)
-b=ListNode(0)
-c=ListNode(1)
-d=ListNode(0)
+b=ListNode(2)
+c=ListNode(3)
+d=ListNode(4)
 
 a.next = b
 b.next = c
@@ -122,5 +148,7 @@ c.next = d
 
 
 ll = LinkedList()
-print(ll.getDecimalValue(a))
+dd=ll.rotateRight(a, 2)
+print(dd.val, dd.next.val, dd.next.next.val, dd.next.next.next.val) 
+
 
