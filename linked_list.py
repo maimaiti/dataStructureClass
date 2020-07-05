@@ -192,21 +192,86 @@ class LinkedList:
                     j += 1
                 i = 0
             head = head.next
-        return dummy.next  
+        return dummy.next
+
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode: 
+        if not head:
+            return None
+        prev, curr = None, head
+
+        while m > 1:
+            prev, curr = curr, curr.next 
+            m, n = m-1, n-1
+
+        tail, con = curr, prev
+        
+        while n:
+            
 
 
-a=ListNode(1)
-b=ListNode(2)
-c=ListNode(3)
-d=ListNode(4)
 
-a.next = b
-b.next = c
-c.next = d
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        #  remove the n-th node from the end of list 
+
+        dummy = ListNode(0)
+        dummy.next = head
+        length=0
+        first = head
+        while first != None:
+            length += 1
+            first = first.next 
+        
+        length -= n
+        first = dummy
+        while length > 0:
+            length -= 1
+            first = first.next
+        first.next = first.next.next
+        return dummy.next 
+
+
+
+    def mergeKLists(self, lists):
+        '''
+        :type lists: list[ListNode]
+        :rtype: ListNode
+        '''
+        self.nodes=[]
+        for l in lists:
+            while l:
+                self.nodes.append(l.val)
+                l=l.next
+                
+        head = point = ListNode(0)
+        for x in sorted(self.nodes):
+            point.next = ListNode(x)
+            point = point.next 
+        return head.next 
+
+
+
+a1=ListNode(1)
+b1=ListNode(2)
+c1=ListNode(1)
+a1.next = b1
+b1.next = c1
+
+a2=ListNode(2)
+b2=ListNode(1)
+c2=ListNode(1)
+a2.next = b2
+b2.next = c2
+
+a3=ListNode(2)
+b3=ListNode(1)
+c3=ListNode(1)
+a3.next = b3
+b3.next = c3
+
+ls = [a1, a2, a3]
 
 
 ll = LinkedList()
-dd=ll.deleteNodes(a, 1, 1)
-print(dd.val, dd.next.val) 
-
+dd=ll.mergeKLists(ls)
+print(dd.val, dd.next.val, dd.next.next.val)
 
