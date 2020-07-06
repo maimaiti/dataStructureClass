@@ -4,11 +4,15 @@ class ListNode:
         self.val = val
         self.next = next
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class LinkedList:
 
     def reverseList(self, head):
-        
         prev, curr = None, head
         while curr:
             curr.next, prev, curr = prev, curr, curr.next
@@ -23,7 +27,6 @@ class LinkedList:
                 current = current.next
         return head
 
-    
     def mergeList(self, l1, l2):
 
         prehead = ListNode(-1)
@@ -40,6 +43,22 @@ class LinkedList:
         prev.next = l1 if l1 is not None else l2
         return prehead.next
 
+    def mergeKLists(self, lists):
+        '''
+        :type lists: list[ListNode]
+        :rtype: ListNode
+        '''
+        nodes=[]
+        for l in lists:
+            while l:
+                nodes.append(l.val)
+                l=l.next
+                
+        head = point = ListNode(0)
+        for x in sorted(nodes):
+            point.next = ListNode(x)
+            point = point.next 
+        return head.next
 
     def hasCycle(self, head):
         if head == None or head.next == None:
@@ -54,6 +73,19 @@ class LinkedList:
             slow = slow.next
             fast = fast.next.next
         return True  
+
+    def detectCycle(self, head):
+        visited = set()
+
+        node = head
+        while node is not None:
+            if node in visited:
+                return node
+            else:
+                visited.add(node)
+                node = node.next
+
+        return None
 
     def middleNode(self, head):
         slow = fast = head
@@ -91,7 +123,6 @@ class LinkedList:
             head = head.next
         return result
 
-
     def addTwoNumber(self, l1, l2):
         result = ListNode(0)
         result_tail = result
@@ -109,6 +140,30 @@ class LinkedList:
             l2 = (l2.next if l2 else None)
                
         return result.next
+
+    def addTwoNumberII(self, l1: ListNode, l2: ListNode)-> ListNode:
+
+        if not l1 and not l2:
+            return None
+        l1_num = 0
+        while l1:
+            l1_num = l1_num * 10 + l1.val
+            l1 = l1.next 
+        
+        l2_num = 0
+        while l2:
+            l2_num = l2_num * 10 + l2.val
+            l2 = l2.next 
+        
+        lsum = l1_num + l2_num
+        
+        head = ListNode(None)
+        curr = head
+        for istr in str(lsum):
+            curr.next = ListNode(int(istr))
+            curr = curr.next 
+        
+        return head.next 
 
     def rotateRight(self, head: ListNode, k: int)->ListNode:
         # base case
@@ -135,47 +190,6 @@ class LinkedList:
         # break the ring
         new_tail.next = None
         return new_head
-
-    def reverseKgroup(self, head, k):
-
-        def reverseLinkedList(head, k):
-
-            new_head, ptr = None, head
-
-            while k:
-                next_node=ptr.next
-                ptr.next = new_head
-                new_head = ptr
-                ptr = next_node
-                k -= 1
-            return new_head
-
-        ptr = head
-        ktail = None
-        new_head = None
-        while ptr:
-            count = 0
-            ptr = head
-            while count < k and ptr:
-                ptr = ptr.next
-                count += 1
-
-            if count == k:
-                revHead = reverseLinkedList(head, k)
-                if not new_head:
-                    new_head=revHead
-                
-                if ktail:
-                    ktail.next = revHead
-                
-                ktail=head
-                head=ptr
-        
-        if ktail:
-            ktail.next = head
-
-        return new_head if new_head else head
-
 
     def deleteNodes(self, head, m, n):
 
@@ -238,23 +252,6 @@ class LinkedList:
         first.next = first.next.next
         return dummy.next 
 
-    def mergeKLists(self, lists):
-        '''
-        :type lists: list[ListNode]
-        :rtype: ListNode
-        '''
-        nodes=[]
-        for l in lists:
-            while l:
-                nodes.append(l.val)
-                l=l.next
-                
-        head = point = ListNode(0)
-        for x in sorted(nodes):
-            point.next = ListNode(x)
-            point = point.next 
-        return head.next
-
     def oddEvenList(self, head: ListNode) -> ListNode:
         if head == None:
             return None
@@ -268,7 +265,6 @@ class LinkedList:
             even = even.next
         odd.next = evenHead
         return head 
-
 
     def partition(self, head: ListNode, x: int) -> ListNode:
         before = before_head = ListNode(0)
@@ -287,32 +283,132 @@ class LinkedList:
         before.next = after_head.next
         return before_head.next 
 
+    def findMiddle(self, head):
+        # When traversing the list with a pointer slow, 
+        # make another pointer fast that traverses twice as fast. 
+        # When fast reaches the end of the list, slow must be in the middle.
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def findMiddleDisconnect(self, head):
+        prev = None
+        slow = fast = head
+        
+        while fast and fast.next:
+            prev = slow 
+            slow = slow.next
+            fast = fast.next.next
+
+        if prev:
+            prev.next = None  # disconnect left half
+
+        return slow 
+
+    def sortedListToBST(self, head):
+        if not head:
+            return None
+
+        mid = self.findMiddleDisconnect(head)
+        node = TreeNode(mid.val)
+
+        # base case when there is just one element in linked list
+        if head == mid:
+            return node
+
+        # recursively from balanced BSTs using the left and right
+        # halves of the original list
+        node.left = self.sortedListToBST(head)
+        node.right = self.sortedListToBST(mid.next)
+        return node
+
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        
+        dummyHead = ListNode(0)
+        dummyHead.next = nodeToInsert = head
+        
+        while head and head.next:
+            if head.val > head.next.val:
+                nodeToInsert = head.next  # locate nodeToInsert 
+                nodeToInsertPre = dummyHead  # locate nodeToInsertPre
+                
+                while nodeToInsertPre.next.val < nodeToInsert.val:
+                    nodeToInsertPre = nodeToInsertPre.next 
+        # Insert nodeToInsert between nodeToInsertPre and nodeToInsertPre.next     
+                head.next = nodeToInsert.next 
+                nodeToInsert.next = nodeToInsertPre.next 
+                nodeToInsertPre.next = nodeToInsert
+            else:
+                head = head.next 
+                
+        return dummyHead.next 
+
+    def PlusOne(self, head: ListNode)-> ListNode:
+        sentinel = ListNode(0)
+        sentinel.next = head
+        not_nine = sentinel
+
+        # find the rightmost not-nine digit
+        while head:
+            if head.val != 9:
+                not_nine = head
+            head = head.next 
+
+        # increase this rightmost not-nine digit by 1
+        not_nine.val += 1
+        not_nine = not_nine.next 
+
+        # set all the following nines to zeros
+        while not_nine:
+            not_nine.val = 0
+            not_nine = not_nine.next 
+        # Return sentinel node if it was set to 1, and head sentinel.next otherwise
+        return sentinel if sentinel.val else sentinel.next 
+
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if headA == None or headB == None:
+            return None
+
+        A_pointer = headA
+        B_pointer = headB
+
+        while A_pointer != B_pointer:
+            A_pointer = headB if A_pointer == None else A_pointer.next
+            B_pointer = headA if B_pointer == None else B_pointer.next
+
+        return A_pointer
 
 
-a1=ListNode(1)
-b1=ListNode(4)
-c1=ListNode(3)
-d1=ListNode(2)
+
+
+a1=ListNode(3)
+b1=ListNode(2)
+c1=ListNode(0)
+d1=ListNode(-4)
+#e1=ListNode(4)
 a1.next = b1
 b1.next = c1
 c1.next = d1
+#d1.next=e1
 
-a2=ListNode(2)
-b2=ListNode(1)
-c2=ListNode(1)
-a2.next = b2
-b2.next = c2
+# a2=ListNode(2)
+# b2=ListNode(1)
+# c2=ListNode(9)
+# a2.next = b2
+# b2.next = c2
 
-a3=ListNode(2)
-b3=ListNode(1)
-c3=ListNode(1)
-a3.next = b3
-b3.next = c3
+# a3=ListNode(2)
+# b3=ListNode(1)
+# c3=ListNode(1)
+# a3.next = b3
+# b3.next = c3
 
-ls = [a1, a2, a3]
+# ls = [a1, a2, a3]
 
 
 ll = LinkedList()
-dd=ll.mergeKLists(ls)
-print(dd.val, dd.next.val, dd.next.next.val)
+r=ll.detectCycle(a1)
+print(r)
 
