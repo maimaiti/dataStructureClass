@@ -243,7 +243,78 @@ class BinaryTree:
             return val
         return self.sumRootToLeaf(root.left, val) + self.sumRootToLeaf(root.right, val)
 
+    def flatten(self, root: TreeNode)-> None:
+        '''Do not return anything, modify root in place'''   
+
+        def flattenTree(node: TreeNode):
+            if not node:
+                return None
+            
+            if not node.left and not node.right:
+                return node
+
+            leftTail = flattenTree(node.left)
+            rightTail=flattenTree(node.right)
+
+            if leftTail:
+                leftTail.right = node.right
+                node.right = node.left
+                node.left = None
+            return rightTail if rightTail else leftTail
+
+        flattenTree(root)
+
+    def findLeaves(self, root: TreeNode) -> list:
         
+        def bottom_up_depth(root):
+        
+            if not root:
+                return 0
+            
+            # get maximum bottom-up depth then add 1 for current level
+            depth = max(bottom_up_depth(root.left), bottom_up_depth(root.right)) + 1
+            
+            # record in the depth_dict
+            depth_dict[depth] = depth_dict.get(depth, []) + [root.val]
+            return depth
+        
+        depth_dict = {}
+        bottom_up_depth(root)
+        # group nodes by depth
+        return [depth_dict[i] for i in depth_dict]
+
+
+    def rightSideView(self, root):
+        if root is None:
+            return []
+
+        rightside = []
+        
+        def helper(node: TreeNode, level: int) -> None:
+            if level == len(rightside):
+                rightside.append(node.val)
+            for child in (node.right, node.left):
+                if child:
+                    helper(child, level+1)
+        helper(root, 0)
+        return rightside
+
+    def sumEvenGrandparent(self, root: TreeNode) -> int:
+        
+        def DFS(node, parent, grandparent):
+            if not node:
+                return None
+            
+            nonlocal answer 
+            if parent and grandparent and grandparent.val % 2 == 0:
+                answer += node.val
+                
+            DFS(node.left, node, parent)
+            DFS(node.right, node, parent)
+            
+        answer = 0
+        DFS(root, None, None)
+        return answer
 
 
 
@@ -280,12 +351,18 @@ class CBTInserter:
 
 
 
-a=TreeNode(1)
-b=TreeNode(0)
-c=TreeNode(1)
-d=TreeNode(0)
-e=TreeNode(1)
-f=TreeNode(0)
+        
+
+
+
+
+
+a=TreeNode(2)
+b=TreeNode(2)
+c=TreeNode(4)
+d=TreeNode(4)
+e=TreeNode(5)
+f=TreeNode(6)
 
 a.left = b 
 a.right= c
@@ -300,6 +377,7 @@ c.right = f
 # a1.right=c1
 
 bt = BinaryTree()
-print(bt.sumRootToLeaf(a, val=0))
+print(bt.sumEvenGrandparent(a))
+
 
 
