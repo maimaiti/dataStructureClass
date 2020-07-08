@@ -12,6 +12,16 @@ class TreeNode:
 
 class LinkedList:
 
+    def makeList(self, v):
+        # make a linked list from a vector v
+        head = ListNode(v[0])
+        for i in range(1, len(v)):
+            ptr = head
+            while ptr.next:
+                ptr = ptr.next
+            ptr.next = ListNode(v[i])
+        return head
+
     def reverseList(self, head):
         prev, curr = None, head
         while curr:
@@ -74,9 +84,8 @@ class LinkedList:
             fast = fast.next.next
         return True  
 
-    def detectCycle(self, head):
+    def detectCycle(self, head: ListNode)-> ListNode:
         visited = set()
-
         node = head
         while node is not None:
             if node in visited:
@@ -368,6 +377,7 @@ class LinkedList:
         return sentinel if sentinel.val else sentinel.next 
 
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+
         if headA == None or headB == None:
             return None
 
@@ -379,3 +389,213 @@ class LinkedList:
             B_pointer = headA if B_pointer == None else B_pointer.next
 
         return A_pointer
+
+
+
+
+
+
+class MyLinkedList:
+    # design linked list. 
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.size = 0
+        self.head = ListNode(0) # sentinel node
+        
+
+    def get(self, index: int) -> int:
+        """
+        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+        """
+        if index < 0 or index >= self.size:
+            return -1
+        
+        # index steps move from sentinel node to wanted index
+        curr = self.head
+        for i in range(index + 1):
+            curr = curr.next 
+        return curr.val 
+        
+
+    def addAtHead(self, val: int) -> None:
+        """
+        Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+        """
+        self.addAtIndex(0, val)
+
+    def addAtTail(self, val: int) -> None:
+        """
+        Append a node of value val to the last element of the linked list.
+        """
+        self.addAtIndex(self.size, val)
+        
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        """
+        Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted.
+        """
+        if index > self.size:
+            return 
+        
+        if index < 0:
+            index = 0
+            
+        self.size += 1
+        # find the predecessor of the node to be added
+        pred = self.head 
+        for i in range(index):
+            pred = pred.next 
+        
+        # node to be added
+        to_add = ListNode(val)
+        # insertion itself
+        to_add.next = pred.next 
+        pred.next = to_add 
+        
+    def deleteAtIndex(self, index: int) -> None:
+        """
+        Delete the index-th node in the linked list, if the index is valid.
+        """
+        if index < 0 or index >= self.size:
+            return 
+        
+        self.size -= 1
+        
+        # find predecessor of the node to be deleted
+        pred = self.head
+        for i in range(index):
+            pred = pred.next 
+        # pred.next 
+        pred.next = pred.next.next 
+
+
+
+
+
+
+
+class DListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next, self.prev = None, None
+
+class MyDLinkedList:
+    def __init__(self):
+        self.size = 0
+        # sentinel nodes as pseudo-head and pseudo-tail
+        self.head, self.tail = DListNode(0), DListNode(0) 
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        
+
+    def get(self, index: int) -> int:
+        """
+        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+        """
+        # if index is invalid
+        if index < 0 or index >= self.size:
+            return -1
+        
+        # choose the fastest way: to move from the head
+        # or to move from the tail
+        if index + 1 < self.size - index:
+            curr = self.head
+            for _ in range(index + 1):
+                curr = curr.next
+        else:
+            curr = self.tail
+            for _ in range(self.size - index):
+                curr = curr.prev
+                
+        return curr.val
+            
+
+    def addAtHead(self, val: int) -> None:
+        """
+        Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+        """
+        pred, succ = self.head, self.head.next
+        
+        self.size += 1
+        to_add = ListNode(val)
+        to_add.prev = pred
+        to_add.next = succ
+        pred.next = to_add
+        succ.prev = to_add
+        
+
+    def addAtTail(self, val: int) -> None:
+        """
+        Append a node of value val to the last element of the linked list.
+        """
+        succ, pred = self.tail, self.tail.prev
+        
+        self.size += 1
+        to_add = ListNode(val)
+        to_add.prev = pred
+        to_add.next = succ
+        pred.next = to_add
+        succ.prev = to_add
+        
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        """
+        Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted.
+        """
+        # If index is greater than the length, 
+        # the node will not be inserted.
+        if index > self.size:
+            return
+        
+        # [so weird] If index is negative, 
+        # the node will be inserted at the head of the list.
+        if index < 0:
+            index = 0
+        
+        # find predecessor and successor of the node to be added
+        if index < self.size - index:
+            pred = self.head
+            for _ in range(index):
+                pred = pred.next
+            succ = pred.next
+        else:
+            succ = self.tail
+            for _ in range(self.size - index):
+                succ = succ.prev
+            pred = succ.prev
+        
+        # insertion itself
+        self.size += 1
+        to_add = ListNode(val)
+        to_add.prev = pred
+        to_add.next = succ
+        pred.next = to_add
+        succ.prev = to_add
+        
+
+    def deleteAtIndex(self, index: int) -> None:
+        """
+        Delete the index-th node in the linked list, if the index is valid.
+        """
+        # if the index is invalid, do nothing
+        if index < 0 or index >= self.size:
+            return
+        
+        # find predecessor and successor of the node to be deleted
+        if index < self.size - index:
+            pred = self.head
+            for _ in range(index):
+                pred = pred.next
+            succ = pred.next.next
+        else:
+            succ = self.tail
+            for _ in range(self.size - index - 1):
+                succ = succ.prev
+            pred = succ.prev.prev
+            
+        # delete pred.next 
+        self.size -= 1
+        pred.next = succ
+        succ.prev = pred

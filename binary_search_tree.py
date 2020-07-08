@@ -127,7 +127,6 @@ class binarySearchTree:
             m=max(c.values())
             return [key for key, value in c.items() if value == m]
 
-    
     def isValidBST(self, root):
 
         def helper(node, lower=float('-inf'), upper=float('inf')):
@@ -144,9 +143,8 @@ class binarySearchTree:
                 return False
             return True
         
-        return helper(root)
-
-
+        re
+   
     def closestValue(self, root: TreeNode, target: float) -> int:
 
         def inorder(r: TreeNode):
@@ -154,7 +152,6 @@ class binarySearchTree:
         
         return min(inorder(root), key = lambda x: abs(target - x))
 
-    
     def sortedArrayToBST(self, nums: list) -> TreeNode:
 
         def helper(left, right):
@@ -170,7 +167,6 @@ class binarySearchTree:
         
         return helper(0, len(nums)-1)
 
-
     def lowestCommonAncestor(self, root, p, q):
 
         parent_val = root.val
@@ -182,8 +178,7 @@ class binarySearchTree:
             return self.lowestCommonAncestor(root.left, p, q)
         else:
             return root
-
-    
+  
     def searchBST(self, root, val):
         if root is None or val == root.val:
             return root
@@ -191,7 +186,6 @@ class binarySearchTree:
         return self.searchBST(root.left, val) if val < root.val \
             else self.searchBST(root.right, val)
 
-    
     def trimBST(self, root, L, R):
         """L and R are the lowest and highest boundaries"""
         def trim(node):
@@ -221,7 +215,6 @@ class binarySearchTree:
         dfs(root)
         return self.ans 
 
-    
     def getMinDiff(self, root):
         """
         :type root: TreeNode
@@ -238,10 +231,8 @@ class binarySearchTree:
         vals.sort()
         return abs(min(vals[i+1] - vals[i] for i in range(len(vals)-1)))
 
-    def __init__(self): # global tate so each recursive call can access and modifiy 
-        self.total = 0     # the total sum
-
     def BST2greaterTree(self, root):
+        self.total = 0
         if root:
             self.BST2greaterTree(root.right)
             self.total += root.val
@@ -302,7 +293,6 @@ class binarySearchTree:
         def inorder(r):
             return inorder(r.left) + [r.val] + inorder(r.right) if r else []
         return sorted(inorder(root1) + inorder(root2))
-
 
     def balanceBST(self, root: TreeNode) -> TreeNode:
         
