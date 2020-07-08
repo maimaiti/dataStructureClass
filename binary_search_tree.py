@@ -52,8 +52,6 @@ class binarySearchTree:
                 root.left = self.deleteNode(root.left, root.val)
         return root
 
-
-
     def insertIntoBST(self, root, val):
         if not root:
             return TreeNode(val)
@@ -110,7 +108,6 @@ class binarySearchTree:
             # 3. go one step right
             root = root.right
         return None
-
 
     def findMode(self, root: TreeNode)-> list:
         if root:
@@ -265,6 +262,71 @@ class binarySearchTree:
         setVals = set()
         return find(root, k, setVals)
 
+    def twoSumBSTs(self, root1: TreeNode, root2: TreeNode, target: int)-> bool:
+
+        def dfs(root, res):
+            if not root:
+                return None
+            dfs(root.left, res)
+            res.append(root.val)
+            dfs(root.right, res)
+        
+        tree1, tree2 = [], []
+        dfs(root1, tree1)
+        dfs(root2, tree2)
+
+        d = {}
+        for i in range(len(tree1)):
+            val = target - tree1[i]
+            d[val] = True
+        
+        for i in range(len(tree2)):
+            if tree2[i] in d:
+                return True
+        return False
+
+    def splitBST(self, root: TreeNode, V: int) -> List[TreeNode]:
+        if not root:
+            return None, None
+        elif root.val <= V:
+            bns = self.splitBST(root.right, V)
+            root.right = bns[0]
+            return root, bns[1]
+        else:
+            bns = self.splitBST(root.left, V)
+            root.left = bns[1]
+            return bns[0], root
+
+    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+        # Return a list containing all the integers from both trees sorted in ascending order.
+        def inorder(r):
+            return inorder(r.left) + [r.val] + inorder(r.right) if r else []
+        return sorted(inorder(root1) + inorder(root2))
+
+
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        
+        def dfs(r, res):
+            if r:
+                dfs(r.left, res)
+                res.append(r.val)
+                dfs(r.right, res)
+                
+        value = []
+        dfs(root, value)
+        
+        def buildTree(low, high):
+            if low > high:
+                return None
+            
+            mid = (low + high)//2
+            ans = TreeNode(value[mid])
+            ans.left = buildTree(low, mid-1)
+            ans.right = buildTree(mid+1, high)
+            
+            return ans
+        return buildTree(0, len(value)-1)
+
 
 
 
@@ -302,22 +364,19 @@ nums=[-10, -3, 0, 5, 9]
 
 a=TreeNode(1)
 b=TreeNode(2)
-c=TreeNode(33)
-d=TreeNode(25)
-e=TreeNode(40)
-f=TreeNode(11)
-g=TreeNode(34)
-
-
+c=TreeNode(4)
 b.left=a
 b.right=c
-c.left=d
-c.right=e
-d.left=f
-e.left=g
+
+a1=TreeNode(0)
+b1=TreeNode(1)
+c1=TreeNode(3)
+b1.left=a1
+b1.right=c1
+
 
 bs=binarySearchTree()
-print(bs.inorderSuccessor(b, a).val)
+print(bs.twoSumBSTs(b, b1, 5))
 
 
 

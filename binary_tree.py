@@ -17,7 +17,6 @@ class BinaryTree:
             root.left, root.right=self.invertTree(root.right), self.invertTree(root.left)
         return root
 
-
     def maxDepth(self, root):
         """return the max depth of the binary tree"""
         if not root:
@@ -26,7 +25,6 @@ class BinaryTree:
             left_root = self.maxDepth(root.left)
             right_root = self.maxDepth(root.right)
         return max(left_root, right_root) + 1
-
 
     def minDepth(self, root):
         """return the min depth of binary tree"""
@@ -66,7 +64,6 @@ class BinaryTree:
         helper(root, res)
         return res
 
-
     def postOrderTraversal(self, root):
         def helper(root, res):
             if root:
@@ -89,7 +86,6 @@ class BinaryTree:
             and isMirror(t1.left, t2.right)
 
         return isMirror(root, root)
-
 
     def binaryTreePaths(self, root):
 
@@ -129,8 +125,7 @@ class BinaryTree:
             tmp = str(root.val) + ',' + str(dfs(root.left)) + str(dfs(root.right))
             return ',' + tmp
         return dfs(s).find(dfs(s)) >= 0
-
-    
+ 
     def maxPathSum(self, root):
         def max_gain(node):
             nonlocal max_sum
@@ -164,8 +159,7 @@ class BinaryTree:
                 helper(node.right, level + 1)
         helper(root, 0)
         return levels
-
-    
+  
     def zigzagLevelOrder(self, root: TreeNode):
         if not root:
             return None
@@ -283,7 +277,6 @@ class BinaryTree:
         # group nodes by depth
         return [depth_dict[i] for i in depth_dict]
 
-
     def rightSideView(self, root):
         if root is None:
             return []
@@ -330,6 +323,59 @@ class BinaryTree:
                 self.flipEquiv(root1.left, root2.right) and
                 self.flipEquiv(root1.right, root2.left))
 
+    def str2tree(self, s):
+    # construct a binary tree from a string consisting of parenthesis and integers.
+        def t(val, left=None, right=None):
+            node, node.left, node.right = TreeNode(val), left, right
+            return node
+
+        # '4(2(3)(1))(6(5))' to 't(4,t(2,t(3),t(1)),t(6,t(5)))'
+        return eval('t(' + s.replace('(', ',t(')  +')') if s else None 
+
+    def longestUnivaluePath(self, root: TreeNode) -> int:
+    # find the length of the longest path where each node in the path has the same value. 
+        self.ans = 0
+        
+        def arrow_length(node):
+            if not node: return 0
+            left_length = arrow_length(node.left)
+            right_length= arrow_length(node.right)
+            left_arrow = right_arrow = 0
+            if node.left and node.left.val == node.val:
+                left_arrow = left_length + 1
+            if node.right and node.right.val == node.val:
+                right_arrow = right_length + 1
+            self.ans = max(self.ans, left_arrow + right_arrow)
+            return max(left_arrow, right_arrow)
+        
+        arrow_length(root)
+        return self.ans 
+
+    def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
+    # Return a list of the values of all nodes that have a distance K from the target node. 
+        # DFS
+        def dfs(node, par = None):
+            if node:
+                node.par = par
+                dfs(node.left, node)
+                dfs(node.right, node)
+                
+        dfs(root)
+        
+        # breadth first search to find all nodes a distance K from a target
+        queue = collections.deque([(target, 0)])
+        seen = {target}
+        while queue:
+            if queue[0][1] == K:
+                return [node.val for node, d in queue]
+            node, d = queue.popleft()
+            for nei in (node.left, node.right, node.par):
+                if nei and nei not in seen:
+                    seen.add(nei)
+                    queue.append((nei, d+1))
+        
+        return []
+        
 
 
 class CBTInserter:
@@ -362,36 +408,38 @@ class CBTInserter:
         return node.val
 
 
+bt = BinaryTree()
+s="4(2(3)(1))(6(5))"
+tt=bt.str2tree(s)
 
-
-
+print(tt.val, tt.left.val, tt.right.val)
         
 
 
 
 
 
-a=TreeNode(2)
-b=TreeNode(2)
-c=TreeNode(4)
-d=TreeNode(4)
-e=TreeNode(5)
-f=TreeNode(6)
+# a=TreeNode(2)
+# b=TreeNode(2)
+# c=TreeNode(4)
+# d=TreeNode(4)
+# e=TreeNode(5)
+# f=TreeNode(6)
 
-a.left = b 
-a.right= c
-b.left = d
-c.left = e
-c.right = f
+# a.left = b 
+# a.right= c
+# b.left = d
+# c.left = e
+# c.right = f
 
-# a1=TreeNode(5)
-# b1=TreeNode(2)
-# c1=TreeNode(4)
-# a1.left=b1
-# a1.right=c1
+# # a1=TreeNode(5)
+# # b1=TreeNode(2)
+# # c1=TreeNode(4)
+# # a1.left=b1
+# # a1.right=c1
 
-bt = BinaryTree()
-print(bt.sumEvenGrandparent(a))
+# bt = BinaryTree()
+# print(bt.sumEvenGrandparent(a))
 
 
 
