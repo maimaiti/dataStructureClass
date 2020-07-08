@@ -353,7 +353,7 @@ class BinaryTree:
 
     def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
     # Return a list of the values of all nodes that have a distance K from the target node. 
-        # DFS
+
         def dfs(node, par = None):
             if node:
                 node.par = par
@@ -376,7 +376,6 @@ class BinaryTree:
         
         return []
         
-
 
 class CBTInserter:
 # Complete Binary Tree Inserter. A complete binary tree is a binary tree in which every level, 
@@ -407,39 +406,6 @@ class CBTInserter:
             self.deque.popleft()
         return node.val
 
-
-bt = BinaryTree()
-s="4(2(3)(1))(6(5))"
-tt=bt.str2tree(s)
-
-print(tt.val, tt.left.val, tt.right.val)
-        
-
-
-
-
-
-# a=TreeNode(2)
-# b=TreeNode(2)
-# c=TreeNode(4)
-# d=TreeNode(4)
-# e=TreeNode(5)
-# f=TreeNode(6)
-
-# a.left = b 
-# a.right= c
-# b.left = d
-# c.left = e
-# c.right = f
-
-# # a1=TreeNode(5)
-# # b1=TreeNode(2)
-# # c1=TreeNode(4)
-# # a1.left=b1
-# # a1.right=c1
-
-# bt = BinaryTree()
-# print(bt.sumEvenGrandparent(a))
 
 
 

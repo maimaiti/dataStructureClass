@@ -379,36 +379,3 @@ class LinkedList:
             B_pointer = headA if B_pointer == None else B_pointer.next
 
         return A_pointer
-
-
-
-
-a1=ListNode(3)
-b1=ListNode(2)
-c1=ListNode(0)
-d1=ListNode(-4)
-#e1=ListNode(4)
-a1.next = b1
-b1.next = c1
-c1.next = d1
-#d1.next=e1
-
-# a2=ListNode(2)
-# b2=ListNode(1)
-# c2=ListNode(9)
-# a2.next = b2
-# b2.next = c2
-
-# a3=ListNode(2)
-# b3=ListNode(1)
-# c3=ListNode(1)
-# a3.next = b3
-# b3.next = c3
-
-# ls = [a1, a2, a3]
-
-
-ll = LinkedList()
-r=ll.detectCycle(a1)
-print(r)
-

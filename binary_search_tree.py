@@ -329,11 +329,6 @@ class binarySearchTree:
 
 
 
-
-
-
-
-    
           
 class BSTIterator:
     def __init__(self, root):
@@ -356,27 +351,7 @@ class BSTIterator:
         return self.index + 1 < len(self.nodes_sorted)
 
 
-    
 
-nums=[-10, -3, 0, 5, 9]
-   
-
-
-a=TreeNode(1)
-b=TreeNode(2)
-c=TreeNode(4)
-b.left=a
-b.right=c
-
-a1=TreeNode(0)
-b1=TreeNode(1)
-c1=TreeNode(3)
-b1.left=a1
-b1.right=c1
-
-
-bs=binarySearchTree()
-print(bs.twoSumBSTs(b, b1, 5))
 
 
 
