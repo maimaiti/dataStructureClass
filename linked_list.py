@@ -392,9 +392,6 @@ class LinkedList:
 
 
 
-
-
-
 class MyLinkedList:
     # design linked list. 
     def __init__(self):
@@ -469,9 +466,6 @@ class MyLinkedList:
             pred = pred.next 
         # pred.next 
         pred.next = pred.next.next 
-
-
-
 
 
 

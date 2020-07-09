@@ -215,6 +215,20 @@ class binarySearchTree:
         dfs(root)
         return self.ans 
 
+    def rangeSumBSTIter(self, root, L, R):
+        ans = 0
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            if node:
+                if L <= node.val <= R:
+                    ans += node.val
+                if L < node.val:
+                    stack.append(node.left)
+                if node.val < R:
+                    stack.append(node.right)
+        return ans
+
     def getMinDiff(self, root):
         """
         :type root: TreeNode
@@ -276,7 +290,7 @@ class binarySearchTree:
                 return True
         return False
 
-    def splitBST(self, root: TreeNode, V: int) -> List[TreeNode]:
+    def splitBST(self, root: TreeNode, V: int):
         if not root:
             return None, None
         elif root.val <= V:
@@ -288,7 +302,7 @@ class binarySearchTree:
             root.left = bns[1]
             return bns[0], root
 
-    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+    def getAllElements(self, root1: TreeNode, root2: TreeNode):
         # Return a list containing all the integers from both trees sorted in ascending order.
         def inorder(r):
             return inorder(r.left) + [r.val] + inorder(r.right) if r else []
@@ -317,7 +331,29 @@ class binarySearchTree:
             return ans
         return buildTree(0, len(value)-1)
 
+    def recoverTree(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        stack = [] 
+        x = y = pred = None
+        
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            
+            if pred and root.val < pred.val: 
+                y = root
+                if x is None:
+                    x = pred 
+                else:
+                    break
+            pred = root
+            root = root.right
 
+        x.val, y.val = y.val, x.val
 
           
 class BSTIterator:
